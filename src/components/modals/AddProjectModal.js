@@ -15,7 +15,10 @@ const AddProjectModal = ({ isModalOpen, handleCancel, handleOk }) => {
       team: tags,
     };
 
-    const res = await axios.post(`http://localhost:3000/api/project`, data);
+    const res = await axios.post(
+      `https://project-managment-two.vercel.app/api/project`,
+      data
+    );
     console.log(res.data);
     setTimeout(() => {
       setLoading(false);
