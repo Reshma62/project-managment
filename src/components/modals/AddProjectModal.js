@@ -9,6 +9,7 @@ const AddProjectModal = ({
   isModalOpen,
   handleCancel,
   handleOk,
+  refetch,
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,7 @@ const AddProjectModal = ({
       setLoading(false);
       setIsModalOpen(false);
       form.resetFields();
+      refetch();
     } else {
       message.error("Something went wrong!");
       setLoading(false);

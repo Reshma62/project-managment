@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import projects from "../data/projects.json";
+"use client";
 
+import { useQuery } from "@tanstack/react-query";
 
 const useProjects = () => {
   const { isPending, error, data, isLoading, refetch } = useQuery({
@@ -12,7 +12,7 @@ const useProjects = () => {
       return data.data;
     },
   });
-  return { isPending, error, data, isLoading };
+  return { isPending, error, data, isLoading, refetch };
 };
 
 export default useProjects;

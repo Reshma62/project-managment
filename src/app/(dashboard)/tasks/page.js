@@ -1,5 +1,13 @@
+"use client";
+
+import GridView from "@/components/tasks/GridView";
+
 const TaskPage = () => {
-  return <div>Hello I am from TaskPage</div>;
+  return (
+    <div>
+      <GridView />
+    </div>
+  );
 };
 
 export default TaskPage;

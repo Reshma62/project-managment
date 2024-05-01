@@ -10,6 +10,7 @@ const ProjectEditModal = ({
   handleCancel,
   handleOk,
   project,
+  refetch,
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ const ProjectEditModal = ({
     console.log(responseData);
     if (responseData.data) {
       message.success(" project updated successfully!");
+      refetch();
       setLoading(false);
       setIsModalOpen(false);
       form.resetFields();
@@ -107,7 +109,7 @@ const ProjectEditModal = ({
 
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={loading}>
-                Add
+                Update projects
               </Button>
             </Form.Item>
           </Form>
