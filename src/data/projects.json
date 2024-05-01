@@ -1,0 +1,164 @@
+[
+  {
+    "project_id": 1,
+    "project_name": "Website Redesign",
+    "start_date": "2024-05-01",
+    "end_date": "2024-08-31",
+    "status": "In Progress",
+    "team": ["John Doe", "Jane Smith", "Alex Johnson"],
+    "tasks": [
+      {
+        "task_id": 1,
+        "task_name": "Wire framing",
+        "assigned_to": "John Doe",
+        "due_date": "2024-05-15",
+        "status": "Completed"
+      },
+      {
+        "task_id": 2,
+        "task_name": "Design Mockups",
+        "assigned_to": "Jane Smith",
+        "due_date": "2024-05-31",
+        "status": "In Progress"
+      },
+      {
+        "task_id": 3,
+        "task_name": "Frontend Development",
+        "assigned_to": "Alex Johnson",
+        "due_date": "2024-07-15",
+        "status": "Pending"
+      },
+      {
+        "task_id": 4,
+        "task_name": "Backend Development",
+        "assigned_to": "Alex Johnson",
+        "due_date": "2024-07-31",
+        "status": "Not Started"
+      }
+    ]
+  },
+  {
+    "project_id": 2,
+    "project_name": "Product Launch",
+    "start_date": "2024-06-01",
+    "end_date": "2024-09-30",
+    "status": "Not Started",
+    "team": ["Emily Brown", "Michael Lee", "Sophia Garcia"],
+    "tasks": [
+      {
+        "task_id": 1,
+        "task_name": "Market Research",
+        "assigned_to": "Emily Brown",
+        "due_date": "2024-06-15",
+        "status": "In Progress"
+      },
+      {
+        "task_id": 2,
+        "task_name": "Product Development",
+        "assigned_to": "Michael Lee",
+        "due_date": "2024-08-15",
+        "status": "Pending"
+      },
+      {
+        "task_id": 3,
+        "task_name": "Marketing Plan",
+        "assigned_to": "Sophia Garcia",
+        "due_date": "2024-08-31",
+        "status": "Not Started"
+      }
+    ]
+  },
+  {
+    "project_id": 3,
+    "project_name": "Event Management",
+    "start_date": "2024-07-01",
+    "end_date": "2024-10-31",
+    "status": "Not Started",
+    "team": ["David Rodriguez", "Emma Wilson", "Liam Martinez"],
+    "tasks": [
+      {
+        "task_id": 1,
+        "task_name": "Venue Booking",
+        "assigned_to": "David Rodriguez",
+        "due_date": "2024-07-15",
+        "status": "Pending"
+      },
+      {
+        "task_id": 2,
+        "task_name": "Vendor Management",
+        "assigned_to": "Emma Wilson",
+        "due_date": "2024-08-15",
+        "status": "Not Started"
+      },
+      {
+        "task_id": 3,
+        "task_name": "Promotional Activities",
+        "assigned_to": "Liam Martinez",
+        "due_date": "2024-09-15",
+        "status": "Not Started"
+      }
+    ]
+  },
+  {
+    "project_id": 4,
+    "project_name": "Software Development",
+    "start_date": "2024-08-01",
+    "end_date": "2024-12-31",
+    "status": "Not Started",
+    "team": ["Olivia Taylor", "Noah Brown", "Ava Wilson"],
+    "tasks": [
+      {
+        "task_id": 1,
+        "task_name": "Requirement Gathering",
+        "assigned_to": "Olivia Taylor",
+        "due_date": "2024-08-15",
+        "status": "Not Started"
+      },
+      {
+        "task_id": 2,
+        "task_name": "Prototyping",
+        "assigned_to": "Noah Brown",
+        "due_date": "2024-09-15",
+        "status": "Not Started"
+      },
+      {
+        "task_id": 3,
+        "task_name": "Development",
+        "assigned_to": "Ava Wilson",
+        "due_date": "2024-11-30",
+        "status": "Not Started"
+      }
+    ]
+  },
+  {
+    "project_id": 5,
+    "project_name": "Marketing Campaign",
+    "start_date": "2024-09-01",
+    "end_date": "2024-11-30",
+    "status": "Not Started",
+    "team": ["Ethan Anderson", "Isabella Garcia", "James Smith"],
+    "tasks": [
+      {
+        "task_id": 1,
+        "task_name": "Campaign Strategy",
+        "assigned_to": "Ethan Anderson",
+        "due_date": "2024-09-15",
+        "status": "Not Started"
+      },
+      {
+        "task_id": 2,
+        "task_name": "Content Creation",
+        "assigned_to": "Isabella Garcia",
+        "due_date": "2024-10-15",
+        "status": "Not Started"
+      },
+      {
+        "task_id": 3,
+        "task_name": "Ad Campaign Setup",
+        "assigned_to": "James Smith",
+        "due_date": "2024-11-15",
+        "status": "Not Started"
+      }
+    ]
+  }
+]

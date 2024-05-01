@@ -2,19 +2,43 @@
 
 import { useState } from "react";
 import { Button, Checkbox, Form, Input, Flex, message } from "antd";
+import { useRouter } from "next/navigation";
 
+import { createServer } from "miragejs";
+import { useQuery } from "@tanstack/react-query";
+
+createServer({
+  routes() {
+    this.get("/api/login", () => {
+      return {
+        _id: 1,
+        name: "admin",
+        password: "password",
+      };
+    });
+  },
+});
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
-
+  const { isPending, error, data, isLoading } = useQuery({
+    queryKey: ["user_data"],
+    queryFn: async () => {
+      const res = await fetch("/api/login");
+      return res.json();
+    },
+  });
+  const router = useRouter();
   const onFinish = (values) => {
     setLoading(true);
+
     // Simulate authentication
     setTimeout(() => {
       setLoading(false);
-      if (values.username === "admin" && values.password === "password") {
+      if (values.username === data.name && values.password === data.password) {
         // Mock successful login
         message.success("Logged in successfully!");
         console.log("Success:", values);
+        router.push("/");
         // Redirect or perform necessary action after successful login
       } else {
         // Mock unsuccessful login
@@ -22,10 +46,6 @@ const LoginPage = () => {
         console.log("Failed: Invalid username or password");
       }
     }, 1000); // Simulate network delay
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -37,7 +57,7 @@ const LoginPage = () => {
           remember: true,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        // onFinishFailed={onFinishFailed}
         autoComplete="off"
         className="bg-slate-300 max-w-[600px] w-full !px-12 !py-10 rounded-lg"
       >

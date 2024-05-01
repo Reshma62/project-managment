@@ -8,6 +8,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
+import Link from "next/link";
 const { Header, Sider, Content, Footer } = Layout;
 
 const DashboardLayout = ({ children }) => {
@@ -46,15 +47,20 @@ const DashboardLayout = ({ children }) => {
             {
               key: "1",
               icon: <DashboardOutlined />,
-              label: "Dashboard",
+              label: <Link href={"/"}>Dashboard</Link>,
             },
             {
               key: "2",
               icon: <VideoCameraOutlined />,
-              label: "Projects",
+              label: <Link href={"/projects"}>Projects</Link>,
             },
             {
               key: "3",
+              icon: <UserOutlined />,
+              label: <Link href={"/tasks"}>Task lists</Link>,
+            },
+            {
+              key: "4",
               icon: <UserOutlined />,
               label: "Users",
             },
