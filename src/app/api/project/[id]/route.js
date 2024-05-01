@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
   try {
     const id = params.id;
     const res = await Project.findOne({ _id: id });
-
+    console.log(id);
     return NextResponse.json({
       message: "get single project",
       data: res,
@@ -22,6 +22,7 @@ export async function GET(request, { params }) {
 export async function PATCH(request, { params }) {
   try {
     const id = params.id;
+    console.log(id);
     const data = await request.json();
     const res = await Project.findOneAndUpdate({ _id: id }, data, {
       new: true,

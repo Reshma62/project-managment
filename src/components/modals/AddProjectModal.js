@@ -1,11 +1,21 @@
-import { Button, Flex, Form, Modal, Input, message } from "antd";
+import { Button, Flex, Form, Modal, Input, message, Select } from "antd";
 import { useState } from "react";
 import AddTeam from "../projects/AddTeam";
-import axios from "axios";
 
-const AddProjectModal = ({ isModalOpen, handleCancel, handleOk }) => {
+import { postHooks } from "@/hooks/apiHooks";
+
+const AddProjectModal = ({
+  setIsModalOpen,
+  isModalOpen,
+  handleCancel,
+  handleOk,
+}) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
   const onFinish = async (values) => {
     setLoading(true);
 
@@ -15,17 +25,17 @@ const AddProjectModal = ({ isModalOpen, handleCancel, handleOk }) => {
       team: tags,
     };
 
-    const res = await axios.post(
-      `https://project-managment-two.vercel.app/api/project`,
-      data
-    );
-    console.log(res.data);
-    setTimeout(() => {
+    const responseData = await postHooks(data, "project");
+    console.log(responseData);
+    if (responseData.data) {
+      message.success("Added project successfully!");
       setLoading(false);
-
-      message.success("Updated project in successfully!");
-      //     console.log("Success:", values);
-    }, 1000); // Simulate network delay
+      setIsModalOpen(false);
+      form.resetFields();
+    } else {
+      message.error("Something went wrong!");
+      setLoading(false);
+    }
   };
   return (
     <div>
@@ -58,7 +68,29 @@ const AddProjectModal = ({ isModalOpen, handleCancel, handleOk }) => {
             </Form.Item>
 
             <Form.Item label="Status" name="status">
-              <Input />
+              <Select
+                defaultValue="inProgress"
+                onChange={handleChange}
+                options={[
+                  {
+                    value: "inProgress",
+                    label: "In progress",
+                  },
+                  {
+                    value: "not_start ",
+                    label: "Not Started",
+                  },
+                  {
+                    value: "complete",
+                    label: "Complete",
+                  },
+                  {
+                    value: "disabled",
+                    label: "Disabled",
+                    disabled: true,
+                  },
+                ]}
+              />
             </Form.Item>
             <Form.Item label="Add team member" name="team_member">
               <AddTeam tags={tags} setTags={setTags} />

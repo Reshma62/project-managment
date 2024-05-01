@@ -40,6 +40,7 @@ const Card = ({ project }) => {
         handleOk={handleOk}
         handleCancel={handleCancel}
         project={project}
+        setIsModalOpen={setIsModalOpen}
       />
     </div>
   );

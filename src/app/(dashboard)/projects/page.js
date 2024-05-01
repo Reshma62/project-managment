@@ -39,6 +39,7 @@ const ProjectPage = () => {
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
         handleOk={handleOk}
+        setIsModalOpen={setIsModalOpen}
       />
     </div>
   );

@@ -1,25 +1,51 @@
-"use client";
+import { Button, Flex, Form, Modal, Input, message, Select } from "antd";
+import { useEffect, useState } from "react";
+import AddTeam from "../projects/AddTeam";
 
-import { Button, Flex, Form, Input, Modal, message } from "antd";
-import { useState } from "react";
-const ProjectEditModal = ({ isModalOpen, handleCancel, handleOk, project }) => {
+import { patchHooks } from "@/hooks/apiHooks";
+
+const ProjectEditModal = ({
+  setIsModalOpen,
+  isModalOpen,
+  handleCancel,
+  handleOk,
+  project,
+}) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState([]);
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  useEffect(() => {
+    setTags(project.team);
+  }, [project.team]);
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     setLoading(true);
-    // Simulate authentication
-    console.log(values);
-    setTimeout(() => {
-      setLoading(false);
 
-      message.success("Updated project in successfully!");
-      //     console.log("Success:", values);
-    }, 1000); // Simulate network delay
+    const data = {
+      project_name: values.project_name,
+      status: values.status,
+      team: tags,
+    };
+
+    const responseData = await patchHooks(data, "project", project._id);
+    console.log(responseData);
+    if (responseData.data) {
+      message.success(" project updated successfully!");
+      setLoading(false);
+      setIsModalOpen(false);
+      form.resetFields();
+    } else {
+      message.error("Something went wrong!");
+      setLoading(false);
+    }
   };
   return (
-    <>
+    <div>
       <Modal
-        title={`${project.project_name} Edit`}
+        title={`Add project `}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -29,13 +55,13 @@ const ProjectEditModal = ({ isModalOpen, handleCancel, handleOk, project }) => {
           <Form
             layout="vertical"
             name="basic"
-            initialValues={{
-              project_name: project.project_name || "project name",
-              status: project.status || "project status",
-            }}
             onFinish={onFinish}
             autoComplete="off"
             className="w-full"
+            initialValues={{
+              project_name: project.project_name || "",
+              status: project.status || "",
+            }}
           >
             <Form.Item
               label="Project Name"
@@ -51,18 +77,44 @@ const ProjectEditModal = ({ isModalOpen, handleCancel, handleOk, project }) => {
             </Form.Item>
 
             <Form.Item label="Status" name="status">
-              <Input />
+              <Select
+                defaultValue="inProgress"
+                onChange={handleChange}
+                options={[
+                  {
+                    value: "inProgress",
+                    label: "In progress",
+                  },
+                  {
+                    value: "not_start ",
+                    label: "Not Started",
+                  },
+                  {
+                    value: "complete",
+                    label: "Complete",
+                  },
+                  {
+                    value: "disabled",
+                    label: "Disabled",
+                    disabled: true,
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item label="Add team member" name="team_member">
+              <AddTeam tags={tags} setTags={setTags} />
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={loading}>
-                Update
+                Add
               </Button>
             </Form.Item>
           </Form>
         </Flex>
       </Modal>
-    </>
+    </div>
   );
 };
+
 export default ProjectEditModal;
