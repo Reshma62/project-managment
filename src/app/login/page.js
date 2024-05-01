@@ -4,20 +4,9 @@ import { useState } from "react";
 import { Button, Checkbox, Form, Input, Flex, message } from "antd";
 import { useRouter } from "next/navigation";
 
-import { createServer } from "miragejs";
+
 import { useQuery } from "@tanstack/react-query";
 
-createServer({
-  routes() {
-    this.get("/api/login", () => {
-      return {
-        _id: 1,
-        name: "admin",
-        password: "password",
-      };
-    });
-  },
-});
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const { isPending, error, data, isLoading } = useQuery({

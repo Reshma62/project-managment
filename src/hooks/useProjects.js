@@ -1,22 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import projects from "../data/projects.json";
 
-import { createServer } from "miragejs";
-
-createServer({
-  routes() {
-    this.get("/api/projects", () => {
-      return projects;
-    });
-  },
-});
 
 const useProjects = () => {
-  const { isPending, error, data, isLoading } = useQuery({
+  const { isPending, error, data, isLoading, refetch } = useQuery({
     queryKey: ["project_data"],
     queryFn: async () => {
-      const res = await fetch("/api/projects");
-      return res.json();
+      const res = await fetch("/api/project");
+      const data = await res.json();
+      console.log(data);
+      return data.data;
     },
   });
   return { isPending, error, data, isLoading };
