@@ -9,13 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
-  const { isPending, error, data, isLoading } = useQuery({
-    queryKey: ["user_data"],
-    queryFn: async () => {
-      const res = await fetch("/api/login");
-      return res.json();
-    },
-  });
+  
   const router = useRouter();
   const onFinish = (values) => {
     setLoading(true);
@@ -23,7 +17,7 @@ const LoginPage = () => {
     // Simulate authentication
     setTimeout(() => {
       setLoading(false);
-      if (values.username === data.name && values.password === data.password) {
+      if (values.username === "admin" && values.password === "password") {
         // Mock successful login
         message.success("Logged in successfully!");
         console.log("Success:", values);
