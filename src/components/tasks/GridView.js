@@ -1,116 +1,77 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import "./App.css";
+
 
 const data = [
   {
-    id: "item-1",
+    id: "gray",
     content: "Item-1",
   },
   {
-    id: "item-2",
+    id: "pink",
     content: "Item-2",
   },
   {
-    id: "item-3",
+    id: "yellow",
     content: "Item-3",
   },
   {
-    id: "item-4",
+    id: "rose",
     content: "Item-4",
   },
   {
-    id: "item-5",
+    id: "belly",
     content: "Item-5",
   },
   {
-    id: "item-6",
+    id: "naima",
     content: "Item-6",
   },
   {
-    id: "item-7",
+    id: "nila",
     content: "Item-7",
   },
   {
-    id: "item-8",
+    id: "humasha",
     content: "Item-8",
   },
   {
-    id: "item-9",
+    id: "mina",
     content: "Item-9",
   },
 ];
 
 // a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
+const GridView = () => {
+  const [characters, updateCharacters] = useState(data);
+  function handleOnDragEnd(result) {
+    const items = Array.from(characters);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
-  return result;
-};
-
-const grid = 8;
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-  userSelect: "none",
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
-  background: isDragging ? "lightgreen" : "grey",
-  ...draggableStyle,
-});
-
-const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
-  padding: grid,
-  width: 250,
-});
-
-const App = () => {
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    setItems(data);
-  }, []);
-
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const reorderedItems = reorder(
-      items,
-      result.source.index,
-      result.destination.index
-    );
-
-    console.log({ reorderedItems });
-    setItems(reorderedItems);
-  };
-
+    updateCharacters(items);
+  }
   return (
-    <div className="main_content">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
+    <div className="grid grid-cols-3 gap-10 mt-10">
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="characters">
+          {(provided) => (
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
+              className="bg-white px-8 py-5 rounded-xl"
             >
-              {items.map((item, index) => (
+              <h2 className="mb-5">Todo</h2>
+              {characters.map((item, index) => (
                 <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div
-                      className="card"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
+                      className="bg-slate-100 px-5 py-5 rounded-lg my-3"
                     >
+                      {" "}
                       {item.content}
                     </div>
                   )}
@@ -125,4 +86,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default GridView;
