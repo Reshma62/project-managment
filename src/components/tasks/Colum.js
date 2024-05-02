@@ -1,45 +1,130 @@
-import { Droppable } from "react-beautiful-dnd";
+import React, { useEffect, useState } from "react";
 
-import TaskCard from "./TaskCard";
+const DragDropExample = () => {
+  const [tasks, setTasks] = useState([]);
+  const [dropIndicator, setDropIndicator] = useState(null);
 
-function Column(props) {
-  const { droppableId, list, type } = props;
+  useEffect(() => {
+    fetch("http://localhost:3001/tasks")
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data);
+      })
+      .catch((err) => {
+        console.error("err", err);
+        if (!sessionStorage.getItem("showError")) {
+          const ok = window.confirm(
+            "Make sure to run the JSON server by running 'npm run server'"
+          );
+          if (ok) {
+            window.location.reload();
+            sessionStorage.setItem("showError", "true");
+          }
+        }
+      });
+  }, []);
 
-  let style = {
-    backgroundColor: "orange",
-    height: "300px",
-    width: "400px",
-    margin: "100px",
+  //   const updateTask = (task) => {
+  //     fetch(`http://localhost:3001/tasks/${task.id}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(task),
+  //     });
+  //   };
+
+  const handleDragStart = (e, taskId) => {
+    e.dataTransfer.setData("text/plain", taskId.toString());
   };
 
-  console.log(
-    "type = ",
-    droppableId,
-    list.map((v) => v.id)
-  );
+  const handleDragEnd = (e) => {
+    e.dataTransfer.clearData();
+    setDropIndicator(null);
+  };
+
+  const handleDrop = (e, status) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+
+    const task = tasks?.find((task) => +task.id === +taskId);
+
+    if (task) {
+      task.status = status;
+      updateTask(task);
+      setTasks((prevTasks) =>
+        prevTasks?.map((_task) => (_task.id === task?.id ? task : _task))
+      );
+    }
+
+    setDropIndicator(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDropIndicator(e.currentTarget.id);
+  };
+
+  const renderTasks = (status) => {
+    return tasks
+      ?.filter((task) => task.status === status)
+      .map((task) => (
+        <div
+          key={task.id}
+          draggable
+          onDragStart={(e) => handleDragStart(e, task.id)}
+          onDragEnd={handleDragEnd}
+          className={`w-full p-2 bg-gray-100 rounded ${
+            dropIndicator === status ? "bg-blue-200 " : ""
+          }`}
+        >
+          {task.title}
+        </div>
+      ));
+  };
 
   return (
-    <Droppable droppableId={droppableId} type={type}>
-      {(provided) => (
-        <div {...provided.droppableProps} ref={provided.innerRef} style={style}>
-          <h2>{droppableId}</h2>
+    <div className="flex flex-col p-6 h-screen dark:bg-gray-900">
+      <div className="grid grid-cols-3 gap-2">
+        <h2 className="text-center dark:text-white">Todo</h2>
+        <h2 className="text-center dark:text-white">In Progress</h2>
+        <h2 className="text-center dark:text-white">Done</h2>
 
-          {list.map((val, index) => {
-            return (
-              <TaskCard
-                id={val.id}
-                key={val.id}
-                index={index}
-                title={val.title}
-              />
-            );
-          })}
-
-          {provided.placeholder}
+        <div
+          id="todo"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "todo")}
+          className={`flex flex-col items-center justify-start w-full border-2 border-dashed p-0.5 gap-1 rounded ${
+            dropIndicator === "todo" ? "bg-blue-100 " : ""
+          }`}
+        >
+          {renderTasks("todo")}
         </div>
-      )}
-    </Droppable>
-  );
-}
 
-export default Column;
+        <div
+          id="in-progress"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "in-progress")}
+          className={`flex flex-col items-center justify-start w-full border-2 border-dashed p-0.5 gap-1 rounded ${
+            dropIndicator === "in-progress" ? "bg-blue-100 " : ""
+          }`}
+        >
+          {renderTasks("in-progress")}
+        </div>
+
+        <div
+          id="done"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "done")}
+          className={`flex flex-col items-center justify-start w-full border-2 border-dashed p-0.5 gap-1 rounded ${
+            dropIndicator === "done" ? "bg-blue-100 " : ""
+          }`}
+        >
+          {renderTasks("done")}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DragDropExample;

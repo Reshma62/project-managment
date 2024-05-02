@@ -1,89 +1,104 @@
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+const DragDropExample = () => {
+  const [tasks, setTasks] = useState([
+    { id: 1, task: "Task 1", status: "todo" },
+    { id: 2, task: "Task 2", status: "todo" },
+    { id: 3, task: "Task 3", status: "todo" },
+  ]);
+  const [dropIndicator, setDropIndicator] = useState(null);
 
-const data = [
-  {
-    id: "gray",
-    content: "Item-1",
-  },
-  {
-    id: "pink",
-    content: "Item-2",
-  },
-  {
-    id: "yellow",
-    content: "Item-3",
-  },
-  {
-    id: "rose",
-    content: "Item-4",
-  },
-  {
-    id: "belly",
-    content: "Item-5",
-  },
-  {
-    id: "naima",
-    content: "Item-6",
-  },
-  {
-    id: "nila",
-    content: "Item-7",
-  },
-  {
-    id: "humasha",
-    content: "Item-8",
-  },
-  {
-    id: "mina",
-    content: "Item-9",
-  },
-];
+  const handleDragStart = (e, taskId) => {
+    e.dataTransfer.setData("text/plain", taskId.toString());
+  };
 
-// a little function to help us with reordering the result
-const GridView = () => {
-  const [characters, updateCharacters] = useState(data);
-  function handleOnDragEnd(result) {
-    const items = Array.from(characters);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+  const handleDragEnd = (e) => {
+    e.dataTransfer.clearData();
+    setDropIndicator(null);
+  };
 
-    updateCharacters(items);
-  }
+  const handleDrop = (e, status) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+
+    const task = tasks?.find((task) => +task.id === +taskId);
+
+    if (task) {
+      task.status = status;
+
+      setTasks((prevTasks) =>
+        prevTasks?.map((_task) => (_task.id === task?.id ? task : _task))
+      );
+    }
+
+    setDropIndicator(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDropIndicator(e.currentTarget.id);
+  };
+
+  const renderTasks = (status) => {
+    return tasks
+      ?.filter((task) => task.status === status)
+      .map((task) => (
+        <div
+          key={task.id}
+          draggable
+          onDragStart={(e) => handleDragStart(e, task.id)}
+          onDragEnd={handleDragEnd}
+          className={`w-full p-2 bg-gray-100 rounded ${
+            dropIndicator === status ? "bg-blue-200 " : ""
+          }`}
+        >
+          {task.task}
+        </div>
+      ));
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-10 mt-10">
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="characters">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="bg-white px-8 py-5 rounded-xl"
-            >
-              <h2 className="mb-5">Todo</h2>
-              {characters.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="bg-slate-100 px-5 py-5 rounded-lg my-3"
-                    >
-                      {" "}
-                      {item.content}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+    <div className="flex flex-col p-6 h-screen ">
+      <div className="grid grid-cols-3 gap-2">
+        <h2 className="text-center ">Todo</h2>
+        <h2 className="text-center ">In Progress</h2>
+        <h2 className="text-center ">Done</h2>
+
+        <div
+          id="todo"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "todo")}
+          className={`flex flex-col items-center justify-start w-full border-2 border-dashed p-0.5 gap-1 rounded ${
+            dropIndicator === "todo" ? "bg-blue-100 " : ""
+          }`}
+        >
+          {renderTasks("todo")}
+        </div>
+
+        <div
+          id="in-progress"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "in-progress")}
+          className={`flex flex-col items-center justify-start w-full border-2 border-dashed p-0.5 gap-1 rounded ${
+            dropIndicator === "in-progress" ? "bg-blue-100 " : ""
+          }`}
+        >
+          {renderTasks("in-progress")}
+        </div>
+
+        <div
+          id="done"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "done")}
+          className={`flex flex-col items-center justify-start w-full border-2 border-dashed p-0.5 gap-1 rounded ${
+            dropIndicator === "done" ? "bg-blue-100 " : ""
+          }`}
+        >
+          {renderTasks("done")}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default GridView;
+export default DragDropExample;
